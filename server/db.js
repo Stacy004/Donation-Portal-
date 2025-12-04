@@ -36,12 +36,14 @@ const init = () => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         donor_name TEXT,
+        donor_email TEXT,
         amount REAL,
         currency TEXT,
         ghs_equivalent REAL,
         payment_method TEXT,
         reference TEXT,
         tx_id TEXT,
+        status TEXT DEFAULT 'completed',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY(user_id) REFERENCES users(id)
       )

@@ -11,6 +11,7 @@ type Step = "amount" | "details" | "payment" | "success";
 
 interface DonorInfo {
   name: string;
+  email: string;
   phone: string;
   amount: number;
   currency: CurrencyCode;
@@ -32,7 +33,7 @@ const DonationPortal = () => {
     setStep("details");
   };
 
-  const handleFormSubmit = (info: { name: string; phone: string; amount: number; message: string }) => {
+  const handleFormSubmit = (info: { name: string; email: string; phone: string; amount: number; message: string }) => {
     setDonorInfo({
       ...info,
       currency: selectedCurrency,
@@ -41,7 +42,29 @@ const DonationPortal = () => {
     setStep("payment");
   };
 
-  const handlePaymentComplete = () => {
+  const handlePaymentComplete = async () => {
+    // Post payment to backend
+    try {
+      const res = await fetch((import.meta.env.VITE_API_BASE || 'http://localhost:5000') + '/payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          donorName: donorInfo?.name,
+          donor_email: donorInfo?.email,
+          amount: donorInfo?.amount,
+          currency: donorInfo?.currency,
+          ghsEquivalent: donorInfo?.ghsEquivalent,
+          paymentMethod: 'bank_or_momo',
+          reference: 'Project 2026',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Payment failed');
+      console.log('Payment recorded:', data);
+    } catch (err) {
+      console.error('Failed to send payment to backend', err);
+    }
+
     setStep("success");
   };
 

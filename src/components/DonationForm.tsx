@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { User, Phone, MessageSquare, ArrowRight } from "lucide-react";
+import { User, Phone, Mail, MessageSquare, ArrowRight } from "lucide-react";
 import { CurrencyCode, formatCurrency } from "@/lib/currencies";
 
 interface DonorInfo {
   name: string;
+  email: string;
   phone: string;
   amount: number;
   message: string;
@@ -23,6 +24,7 @@ interface DonationFormProps {
 
 const DonationForm = ({ selectedAmount, currency, ghsEquivalent, onSubmit, onBack }: DonationFormProps) => {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -34,6 +36,12 @@ const DonationForm = ({ selectedAmount, currency, ghsEquivalent, onSubmit, onBac
       newErrors.name = "Name is required";
     } else if (name.trim().length > 100) {
       newErrors.name = "Name must be less than 100 characters";
+    }
+
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Please enter a valid email address";
     }
     
     if (!phone.trim()) {
@@ -56,6 +64,7 @@ const DonationForm = ({ selectedAmount, currency, ghsEquivalent, onSubmit, onBac
     if (validateForm()) {
       onSubmit({
         name: name.trim(),
+        email: email.trim(),
         phone: phone.trim(),
         amount: selectedAmount,
         message: message.trim(),
@@ -98,6 +107,26 @@ const DonationForm = ({ selectedAmount, currency, ghsEquivalent, onSubmit, onBac
         </div>
         {errors.name && (
           <p className="text-sm text-destructive">{errors.name}</p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="email" className="text-foreground font-medium">
+          Email *
+        </Label>
+        <div className="relative">
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            id="email"
+            type="email"
+            placeholder="your@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        {errors.email && (
+          <p className="text-sm text-destructive">{errors.email}</p>
         )}
       </div>
 

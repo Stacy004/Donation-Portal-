@@ -4,6 +4,7 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('./db');
+const nodemailer = require('nodemailer');
 const path = require('path');
 
 const app = express();
@@ -11,6 +12,82 @@ app.use(cors());
 app.use(express.json());
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret123';
+
+// Email Configuration
+const transporter = nodemailer.createTransport({
+  service: process.env.EMAIL_SERVICE || 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+// Function to send confirmation email
+const sendConfirmationEmail = (donorEmail, donorName, amount, currency, ghsEquivalent, paymentMethod, reference) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER || 'noreply@mentorsfoundation.org',
+    to: donorEmail,
+    subject: 'Donation Confirmation - Mentors Foundation',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: white; border-radius: 10px 10px 0 0;">
+          <h1 style="margin: 0; font-size: 24px;">Thank You for Your Donation!</h1>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
+          <p style="color: #333; font-size: 16px;">Dear ${donorName},</p>
+          
+          <p style="color: #666; font-size: 14px; line-height: 1.6;">
+            We are grateful for your generous donation to Mentors Foundation. Your contribution will make a meaningful difference in our mission.
+          </p>
+          
+          <div style="background: white; padding: 20px; border-left: 4px solid #667eea; margin: 20px 0; border-radius: 4px;">
+            <h3 style="margin: 0 0 15px 0; color: #333;">Donation Details</h3>
+            <table style="width: 100%; color: #666; font-size: 14px;">
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0;">Amount:</td>
+                <td style="text-align: right; font-weight: bold; color: #333;">${amount} ${currency}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0;">GHS Equivalent:</td>
+                <td style="text-align: right; font-weight: bold; color: #333;">GHS ${ghsEquivalent.toLocaleString()}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0;">Payment Method:</td>
+                <td style="text-align: right; text-transform: capitalize;">${paymentMethod}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0;">Reference:</td>
+                <td style="text-align: right; font-weight: bold;">${reference}</td>
+              </tr>
+            </table>
+          </div>
+          
+          <p style="color: #666; font-size: 14px; line-height: 1.6;">
+            A donation receipt has been recorded and will be available shortly. For any questions, please contact us at <strong>donations@mentorsfoundation.org</strong>.
+          </p>
+          
+          <div style="background: #667eea; color: white; padding: 15px; text-align: center; border-radius: 4px; margin: 20px 0;">
+            <p style="margin: 0; font-size: 14px;">Your generosity is changing lives. Thank you!</p>
+          </div>
+          
+          <p style="color: #999; font-size: 12px; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+            Mentors Foundation<br>
+            All rights reserved. © 2025
+          </p>
+        </div>
+      </div>
+    `,
+  };
+
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      console.error('Email error:', err);
+    } else {
+      console.log('Confirmation email sent to:', donorEmail);
+    }
+  });
+};
 
 // Helpers
 function generateToken(user) {
@@ -80,18 +157,22 @@ app.post('/auth/login', async (req, res) => {
   });
 });
 
-// Payments
-app.post('/payments', authMiddleware, (req, res) => {
-  const { donorName, amount, currency, ghsEquivalent, paymentMethod, reference, txId } = req.body;
-  if (!amount || !currency) return res.status(400).json({ message: 'Amount and currency required' });
+// Payments - with email confirmation
+app.post('/payments', (req, res) => {
+  const { donorName, donor_email, amount, currency, ghsEquivalent, paymentMethod, reference, txId } = req.body;
+  if (!amount || !currency || !donor_email) return res.status(400).json({ message: 'Amount, currency, and email required' });
   
-  db.run('INSERT INTO payments (user_id, donor_name, amount, currency, ghs_equivalent, payment_method, reference, tx_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-    [req.user.id || null, donorName || null, amount, currency, ghsEquivalent || null, paymentMethod || null, reference || null, txId || null],
+  db.run('INSERT INTO payments (user_id, donor_name, donor_email, amount, currency, ghs_equivalent, payment_method, reference, tx_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [null, donorName || null, donor_email, amount, currency, ghsEquivalent || null, paymentMethod || null, reference || null, txId || null, 'completed'],
     function(err) {
       if (err) {
         console.error(err);
         return res.status(500).json({ message: 'Server error' });
       }
+
+      // Send confirmation email
+      sendConfirmationEmail(donor_email, donorName, amount, currency, ghsEquivalent, paymentMethod, reference);
+
       res.json({ id: this.lastID, message: 'Payment recorded' });
     }
   );
@@ -115,6 +196,41 @@ app.get('/admin/users', authMiddleware, adminOnly, (req, res) => {
       return res.status(500).json({ message: 'Server error' });
     }
     res.json(rows || []);
+  });
+});
+
+// Delete payment
+app.delete('/admin/payments/:id', authMiddleware, adminOnly, (req, res) => {
+  const { id } = req.params;
+  db.run('DELETE FROM payments WHERE id = ?', [id], function(err) {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Server error' });
+    }
+    res.json({ message: 'Payment deleted successfully' });
+  });
+});
+
+// Send confirmation email manually
+app.post('/admin/send-confirmation/:id', authMiddleware, adminOnly, (req, res) => {
+  const { id } = req.params;
+  
+  db.get('SELECT * FROM payments WHERE id = ?', [id], (err, payment) => {
+    if (err || !payment) {
+      return res.status(404).json({ message: 'Payment not found' });
+    }
+
+    sendConfirmationEmail(
+      payment.donor_email,
+      payment.donor_name,
+      payment.amount,
+      payment.currency,
+      payment.ghs_equivalent,
+      payment.payment_method,
+      payment.reference
+    );
+
+    res.json({ message: 'Confirmation email sent successfully' });
   });
 });
 

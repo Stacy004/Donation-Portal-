@@ -146,7 +146,7 @@ const PaymentInstructions = ({ amount, currency, ghsEquivalent, donorName, onCom
       </div>
 
       {/* International Donor Notice */}
-      {isInternationalDonor && paymentMethod === "momo" && (
+      {/* {isInternationalDonor && paymentMethod === "momo" && (
         <div className="flex items-start gap-3 p-4 bg-accent/10 rounded-xl border border-accent/20">
           <Info className="w-5 h-5 text-accent shrink-0 mt-0.5" />
           <div>
@@ -156,7 +156,7 @@ const PaymentInstructions = ({ amount, currency, ghsEquivalent, donorName, onCom
             </p>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Payment Details */}
       {paymentMethod === "momo" ? (
@@ -175,7 +175,7 @@ const PaymentInstructions = ({ amount, currency, ghsEquivalent, donorName, onCom
           <DetailRow label="MoMo Number" value={momoDetails.number} copyable mono />
           <DetailRow label="Account Name" value={momoDetails.name} />
 
-          <div className="bg-primary/5 rounded-xl p-4 border border-primary/20">
+          {/* <div className="bg-primary/5 rounded-xl p-4 border border-primary/20">
             <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
               <Info className="w-4 h-4 text-primary" />
               How to Transfer
@@ -206,7 +206,7 @@ const PaymentInstructions = ({ amount, currency, ghsEquivalent, donorName, onCom
                 Confirm with your PIN
               </li>
             </ol>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="space-y-4 animate-fade-up">
@@ -215,10 +215,10 @@ const PaymentInstructions = ({ amount, currency, ghsEquivalent, donorName, onCom
           {/* Local Transfer Section */}
           {!isInternationalDonor && (
             <div className="space-y-3">
-              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              {/* <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                 <Building2 className="w-4 h-4 text-primary" />
                 Local Bank Transfer (Ghana)
-              </div>
+              </div> */}
               
               <DetailRow label="Account Name" value={bankAccounts.local.accountName} />
               <DetailRow label="Account Number" value={bankAccounts.local.accountNumber} copyable mono />
@@ -233,14 +233,14 @@ const PaymentInstructions = ({ amount, currency, ghsEquivalent, donorName, onCom
         
 
 
-          {isInternationalDonor && (
+          {/* {isInternationalDonor && (
             <div className="bg-accent/10 rounded-xl p-4 border border-accent/20">
               <p className="font-medium text-foreground text-sm">International Transfers</p>
               <p className="text-xs text-muted-foreground mt-1">
                 We currently do not provide direct international wire transfer details through this form. Please contact us at <span className="font-semibold text-foreground">donations@mentorsfoundation.org</span> for assistance or use an alternative local transfer method where possible.
               </p>
             </div>
-          )}
+          )} */}
 
           {/* Reference Note */}
           <div className="bg-accent/10 rounded-xl p-4 border border-accent/20">

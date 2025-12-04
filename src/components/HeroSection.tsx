@@ -9,13 +9,13 @@ const HeroSection = () => {
       </div>
       
       <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance leading-tight">
-        Support the Orphanage donation project
+        Support the Orphan Project- Ghana
         {/* <span className="block text-primary">Make a Donation</span> */}
       </h1>
       
       <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-        Your generosity helps transform the lives of children at{" "}
-        <span className="text-foreground font-medium">Nyamedua Children's Home</span>. 
+        Your generosity helps transform the lives of {" "}
+        <span className="text-foreground font-medium">Orphans in Ghana</span>. 
         Every contribution, big or small, brings hope and opportunity to those who need it most.
       </p>
       
