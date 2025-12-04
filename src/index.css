@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+@layer base {
+  :root {
+    --background: 40 33% 97%;
+    --foreground: 200 20% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 200 20% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 20% 15%;
+
+    --primary: 174 50% 28%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 40 30% 92%;
+    --secondary-foreground: 200 20% 15%;
+
+    --muted: 40 20% 90%;
+    --muted-foreground: 200 10% 40%;
+
+    --accent: 38 90% 55%;
+    --accent-foreground: 200 20% 15%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 174 50% 28%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --gradient-hero: linear-gradient(135deg, hsl(174, 50%, 28%) 0%, hsl(174, 45%, 35%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(38, 90%, 55%) 0%, hsl(35, 85%, 50%) 100%);
+    --shadow-soft: 0 4px 20px -4px hsl(174 50% 28% / 0.15);
+    --shadow-card: 0 8px 30px -8px hsl(200 20% 15% / 0.1);
+    --shadow-glow: 0 0 40px hsl(38 90% 55% / 0.3);
+
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 200 20% 10%;
+    --foreground: 40 20% 95%;
+
+    --card: 200 18% 14%;
+    --card-foreground: 40 20% 95%;
+
+    --popover: 200 18% 14%;
+    --popover-foreground: 40 20% 95%;
+
+    --primary: 174 45% 45%;
+    --primary-foreground: 200 20% 10%;
+
+    --secondary: 200 15% 20%;
+    --secondary-foreground: 40 20% 95%;
+
+    --muted: 200 15% 20%;
+    --muted-foreground: 40 10% 65%;
+
+    --accent: 38 85% 50%;
+    --accent-foreground: 200 20% 10%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 200 15% 22%;
+    --input: 200 15% 22%;
+    --ring: 174 45% 45%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+
+  .animate-fade-up-delay {
+    animation: fadeUp 0.6s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-up-delay-2 {
+    animation: fadeUp 0.6s ease-out 0.4s forwards;
+    opacity: 0;
+  }
+
+  .animate-pulse-soft {
+    animation: pulseSoft 2s ease-in-out infinite;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 hsl(38 90% 55% / 0.4);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px 4px hsl(38 90% 55% / 0.2);
+  }
+}
