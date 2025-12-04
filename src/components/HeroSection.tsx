@@ -5,12 +5,12 @@ const HeroSection = () => {
     <header className="text-center mb-12 animate-fade-up">
       <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-4 py-2 rounded-full text-sm font-medium mb-6">
         <Sparkles className="w-4 h-4" />
-        <span>Project 2026</span>
+        <span>Orphanage Donation portal</span>
       </div>
       
       <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance leading-tight">
-        Support Project 2026
-        <span className="block text-primary">Make a Donation</span>
+        Support the Orphanage donation project
+        {/* <span className="block text-primary">Make a Donation</span> */}
       </h1>
       
       <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">

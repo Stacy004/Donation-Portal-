@@ -33,7 +33,8 @@ const PaymentInstructions = ({ amount, currency, ghsEquivalent, donorName, onCom
       accountName: "Mentors Foundation",
       accountType: "Current Account",
       bankType: "CalBank",
-       correspondentSwift: "CITIUS33",
+      swiftCode: "ACCCGHAC",
+      correspondentSwift: "CITIUS33",
     },
     international: {
       
@@ -223,6 +224,8 @@ const PaymentInstructions = ({ amount, currency, ghsEquivalent, donorName, onCom
               <DetailRow label="Account Number" value={bankAccounts.local.accountNumber} copyable mono />
               <DetailRow label="Account Type" value={bankAccounts.local.accountType} />
               <DetailRow label="Bank Type" value={bankAccounts.local.bankType} />
+              <DetailRow label="SWIFT Code" value={bankAccounts.local.swiftCode} copyable mono />
+
               
             </div>
           )}

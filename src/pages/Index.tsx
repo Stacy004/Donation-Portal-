@@ -1,8 +1,13 @@
 import HeroSection from "@/components/HeroSection";
 import DonationPortal from "@/components/DonationPortal";
 import ContactSection from "@/components/ContactSection";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Lock } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
     <main className="min-h-screen bg-background">
       {/* Decorative background elements */}
@@ -13,6 +18,18 @@ const Index = () => {
 
       <div className="relative z-10 container mx-auto px-4 py-12 md:py-20">
         <div className="max-w-xl mx-auto">
+          {/* Admin Button */}
+          <div className="flex justify-end mb-6">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => navigate("/admin-login")}
+            >
+              <Lock className="w-4 h-4 mr-2" />
+              Admin
+            </Button>
+          </div>
+
           <HeroSection />
           
           <div className="space-y-6">
