@@ -40,7 +40,7 @@ const Index = () => {
           {/* Footer */}
           <footer className="mt-16 text-center">
             <p className="text-sm text-muted-foreground">
-              © 2025 Mentors Foundation. All donations go directly to supporting children in need.
+              © 2025 Mentors Foundation. All donations go directly to supporting children in need..
             </p>
           </footer>
         </div>
