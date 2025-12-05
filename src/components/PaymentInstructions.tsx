@@ -249,7 +249,7 @@ const PaymentInstructions = ({ amount, currency, ghsEquivalent, donorName, onCom
               Payment Reference
             </h4>
             <p className="text-sm text-muted-foreground">
-              Please include <span className="font-semibold text-foreground bg-secondary px-2 py-0.5 rounded">"Project 2026 "</span> as your payment reference.
+              Please include <span className="font-semibold text-foreground bg-secondary px-2 py-0.5 rounded">"Orphan project "</span> as your payment reference.
             </p>
           </div>
 
