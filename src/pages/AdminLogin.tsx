@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState('admin@mentorsfoundation.org');
+  const [email, setEmail] = useState('admin@mentorsfoundation.ngo');
   const [password, setPassword] = useState('adminpassword');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

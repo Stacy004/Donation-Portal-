@@ -25,7 +25,7 @@ const transporter = nodemailer.createTransport({
 // Function to send confirmation email
 const sendConfirmationEmail = (donorEmail, donorName, amount, currency, ghsEquivalent, paymentMethod, reference) => {
   const mailOptions = {
-    from: process.env.EMAIL_USER || 'noreply@mentorsfoundation.org',
+    from: process.env.EMAIL_USER || 'nonreply@mentorslbg.ngo',
     to: donorEmail,
     subject: 'Donation Confirmation - Mentors Foundation',
     html: `
@@ -235,8 +235,8 @@ app.post('/admin/send-confirmation/:id', authMiddleware, adminOnly, (req, res) =
 });
 
 // Create sample admin user if not exists (on startup)
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@mentorsfoundation.org';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'adminpassword';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@mentorsfoundation.ngo';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'mentorslbg';
 
 setTimeout(() => {
   db.get('SELECT id FROM users WHERE email = ?', [ADMIN_EMAIL], async (err, row) => {
