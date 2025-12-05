@@ -9,7 +9,7 @@ const HeroSection = () => {
       </div>
       
       <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance leading-tight">
-        Support the Orphan Project- Ghana
+        Support the Orphans Project- Ghana
         {/* <span className="block text-primary">Make a Donation</span> */}
       </h1>
       
